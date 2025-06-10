@@ -67,7 +67,7 @@ spec:
                 name: versions
                 port:
                   number: 5000
-  tls:
-    - hosts:
-        - versions.geeko.ninja
-      secretName: rancher-ingress-tls  # Certificado TLS en el namespace 'demo'
+#  tls:
+#    - hosts:
+#        - versions.geeko.ninja
+#      secretName: rancher-ingress-tls  # Certificado TLS en el namespace 'demo'

@@ -38,12 +38,13 @@ spec:
   selector:
     app: versions
   ports:
-    - name: versions
+    - name: http
       protocol: TCP
       port: 5000
       targetPort: 5000
+  type: ClusterIP
 
-# Ingress con TLS
+# Ingress
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -51,11 +52,11 @@ metadata:
   name: versions
   namespace: demo
   annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
 spec:
+  ingressClassName: nginx
   rules:
     - host: versions.geeko.ninja
       http:
@@ -67,7 +68,7 @@ spec:
                 name: versions
                 port:
                   number: 5000
-#  tls:
-#    - hosts:
-#        - versions.geeko.ninja
-#      secretName: rancher-ingress-tls  # Certificado TLS en el namespace 'demo'
+  tls:
+    - hosts:
+        - versions.geeko.ninja
+      secretName: rancher-ingress-tls
